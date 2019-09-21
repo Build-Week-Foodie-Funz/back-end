@@ -58,7 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService
 
         for (Reviews r:restaurant.getReviews())
         {
-            newRestaurant.getReviews().add(new Reviews(r.getRestname(), r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), newRestaurant));
+            newRestaurant.getReviews().add(new Reviews(r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), newRestaurant));
         }
 
         for (RestPhotos rp:restaurant.getRestphotos())
@@ -98,7 +98,7 @@ public class RestaurantServiceImpl implements RestaurantService
         {
             for (Reviews r:restaurant.getReviews())
             {
-                currentRestaurant.getReviews().add(new Reviews(r.getRestname(), r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), currentRestaurant));
+                currentRestaurant.getReviews().add(new Reviews(r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), currentRestaurant));
             }
         }
 

@@ -12,9 +12,6 @@ public class Reviews
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long reviewid;
 
-    @Column(nullable = false,
-            unique = true)
-    private String restname;
 
     @Column(nullable = false)
     private String cuisinetype;
@@ -43,9 +40,8 @@ public class Reviews
     {
     }
 
-    public Reviews(String restname, String cuisinetype, String menuitemname, String photomenu, Double itemprice, String itemrating, String shortreview, Restaurant restaurant)
+    public Reviews(String cuisinetype, String menuitemname, String photomenu, Double itemprice, String itemrating, String shortreview, Restaurant restaurant)
     {
-        this.restname = restname;
         this.cuisinetype = cuisinetype;
         this.menuitemname = menuitemname;
         this.photomenu = photomenu;
@@ -65,15 +61,6 @@ public class Reviews
         this.reviewid = reviewid;
     }
 
-    public String getRestname()
-    {
-        return restname;
-    }
-
-    public void setRestname(String restname)
-    {
-        this.restname = restname;
-    }
 
     public String getCuisinetype()
     {
