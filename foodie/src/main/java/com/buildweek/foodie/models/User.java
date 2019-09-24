@@ -2,6 +2,7 @@ package com.buildweek.foodie.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -44,6 +45,7 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<Useremail> useremails = new ArrayList<>();
 
+    @ApiModelProperty(name = "userrest", value = "Restaurant made from User", example = "Some Restaurant, Some Restaurant,...")
     @ManyToMany
     @JoinTable(name = "userrest", joinColumns = {@JoinColumn(name = "userid")}, inverseJoinColumns = {@JoinColumn(name = "restid")})
     @JsonIgnoreProperties("user")

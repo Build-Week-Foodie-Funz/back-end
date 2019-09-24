@@ -6,6 +6,7 @@ import com.buildweek.foodie.models.Restaurant;
 import com.buildweek.foodie.models.Reviews;
 import com.buildweek.foodie.models.User;
 import com.buildweek.foodie.repository.RestaurantRepository;
+import com.buildweek.foodie.repository.ReviewsRepository;
 import com.buildweek.foodie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,9 +29,15 @@ public class RestaurantServiceImpl implements RestaurantService
     @Autowired
     UserRepository userrepos;
 
+    @Autowired
+    ReviewsRepository reviewrepo;
+
+
+
     @Override
     public ArrayList<Restaurant> findAll()
     {
+
             ArrayList<Restaurant> restaurantsList = new ArrayList<>();
             restrepo.findAll()
                     .iterator()
@@ -49,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService
     @Override
     public void delete(long id)
     {
+
         if (restrepo.findById(id).isPresent())
         {
             restrepo.deleteById(id);
@@ -58,6 +66,7 @@ public class RestaurantServiceImpl implements RestaurantService
         }
     }
 
+
     @Override
     public Restaurant save(Restaurant restaurant)
     {
@@ -66,6 +75,7 @@ public class RestaurantServiceImpl implements RestaurantService
         newRestaurant.setResthours(restaurant.getResthours());
         newRestaurant.setRestlocation(restaurant.getRestlocation());
         newRestaurant.setRestrating(restaurant.getRestrating());
+        newRestaurant.setRecentvisit(restaurant.getRecentvisit());
 
         for (Reviews r:restaurant.getReviews())
         {
@@ -91,6 +101,13 @@ public class RestaurantServiceImpl implements RestaurantService
         return restrepo.save(newRestaurant);
 
     }
+    @Override
+    public Reviews findReviewById(long id)
+    {
+        return reviewrepo.findById(id)
+                         .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
+    }
+
 
     @Override
     public Restaurant update(Restaurant restaurant, long id)
@@ -117,6 +134,11 @@ public class RestaurantServiceImpl implements RestaurantService
             currentRestaurant.setRestrating(restaurant.getRestrating());
         }
 
+        if(restaurant.getRecentvisit() != null)
+        {
+            currentRestaurant.setRecentvisit(restaurant.getRecentvisit());
+        }
+
         if(restaurant.getReviews().size() > 0)
         {
             for (Reviews r:restaurant.getReviews())
@@ -132,6 +154,18 @@ public class RestaurantServiceImpl implements RestaurantService
                 currentRestaurant.getRestphotos().add(new RestPhotos(currentRestaurant, rp.getPhoto()));
             }
         }
+
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            String username = ((UserDetails)principal).getUsername();
+//            User u = userrepos.findByUsername(username);
+//            currentRestaurant.getUser().add(u);
+//
+//
+//        } else {
+//            String username = principal.toString();
+//            return currentRestaurant;
+//        }
 
         return restrepo.save(currentRestaurant);
     }

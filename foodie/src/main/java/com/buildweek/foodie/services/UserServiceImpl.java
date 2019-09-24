@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
         for(Restaurant r: user.getRestaurant())
         {
             newUser.getRestaurant()
-                   .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getUser()));
+                   .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getRecentvisit(), r.getUser()));
         }
 
 
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 for (Restaurant r: user.getRestaurant())
                 {
                     currentUser.getRestaurant()
-                               .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getUser()));
+                               .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getRecentvisit(), r.getUser()));
                 }
             }
 

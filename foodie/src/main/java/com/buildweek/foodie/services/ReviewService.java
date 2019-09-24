@@ -16,5 +16,7 @@ public interface ReviewService
 
     Reviews save(Reviews reviews);
 
-    Reviews update(Reviews reviews, long id);
+    Reviews update(Reviews reviews, long reviewid, long restid);
+
+
 }

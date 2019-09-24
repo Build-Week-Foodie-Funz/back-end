@@ -1,6 +1,7 @@
 package com.buildweek.foodie.services;
 
 import com.buildweek.foodie.models.Restaurant;
+import com.buildweek.foodie.models.Reviews;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public interface RestaurantService
 
     Restaurant findRestaurantById(long id);
 
-//    Restaurant findByName(String name);
+    Reviews findReviewById(long id);
 
     void delete(long id);
 

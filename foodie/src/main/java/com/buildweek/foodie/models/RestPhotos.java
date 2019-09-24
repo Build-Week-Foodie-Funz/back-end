@@ -1,6 +1,7 @@
 package com.buildweek.foodie.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 
@@ -8,13 +9,16 @@ import javax.persistence.*;
 @Table(name = "restphotos")
 public class RestPhotos
 {
+    @ApiModelProperty(name = "photoid", value = "primary key for Photo", required = true, example = "1")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long photoid;
 
+    @ApiModelProperty(name = "photo", value = "Photo of Restaurant", required = true, example = "http://www.fnstatic.co.uk/images/content/recipe/three-egg-omelette.jpeg")
     @Column(nullable = false)
     private String photo;
 
+    @ApiModelProperty(name = "restphotos", value = "Photos of Restaurant", example = "http://www.fnstatic.co.uk/images/content/recipe/three-egg-omelette.jpeg, http://www.fnstatic.co.uk/images/content/recipe/three-egg-omelette.jpeg")
     @ManyToOne
     @JoinColumn(name = "restid")
     @JsonIgnoreProperties("restphotos")

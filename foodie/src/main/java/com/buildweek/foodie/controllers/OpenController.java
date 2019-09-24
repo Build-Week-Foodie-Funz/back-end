@@ -71,10 +71,5 @@ public class OpenController
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-    @GetMapping("favicon.ico")
-    void returnNoFavicon()
-    {
-        logger.trace("favicon.ico endpoint accessed!");
-    }
 }
 

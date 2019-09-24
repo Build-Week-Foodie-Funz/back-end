@@ -19,47 +19,19 @@ public class SeedData implements CommandLineRunner
     @Autowired
     UserService userService;
 
-    @Autowired
-    RestaurantService restaurantService;
-
-    @Autowired
-    RestPhotosService restPhotosService;
-
-    @Autowired
-    ReviewService reviewService;
+//    @Autowired
+//    RestaurantService restaurantService;
+//
+//    @Autowired
+//    RestPhotosService restPhotosService;
+//
+//    @Autowired
+//    ReviewService reviewService;
 
 
     @Override
     public void run(String[] args) throws Exception
     {
-
-//
-//
-//        Restaurant rest2 = new Restaurant("Bibou", "Philadelphia, PA", "5:30PM - 11PM", "8/10");
-//        rest2.getRestphotos()
-//             .add(new RestPhotos(rest2,"https://vrconcierge.com/wp-content/uploads/2017/06/8701_bibou-philadelphia-exterior-2.jpg"));
-//        rest2.getRestphotos()
-//             .add(new RestPhotos(rest2,"https://cdn10.phillymag.com/wp-content/uploads/2013/01/10_Bibou_Mike-Arrison.jpg"));
-//        rest2.getRestphotos()
-//             .add(new RestPhotos(rest2, "https://s3-media4.fl.yelpcdn.com/bphoto/9C9kBTbfclVmIDpzzXEdFw/l.jpg"));
-//        rest2.getReviews()
-//             .add(new Reviews(rest2, "French Cuisine", "Veau", "https://www.goodfoodrevolution.com/wp-content/uploads/2012/10/tete-de-veau.jpeg", 27.99, "10/10", "Absolutely delicious! Melt in your mouth veal with fresh vegetables that can not be matched!"));
-//        rest2.getReviews()
-//             .add(new Reviews(rest2, "French Cuisine", "Espadon", "https://cache.marieclaire.fr/data/photo/w700_c17/43/espadon-aux-raisins-et-aux-.jpg", 32.99, "10/10", "Would come back strickly for this meal everytime. The Espadon was fantastic."));
-//        restaurantService.save(rest2);
-//
-//
-//
-//        Restaurant rest3 = new Restaurant("Geno's Steaks", "Philadelphia, PA", "24 hours", "9/10");
-//        rest3.getRestphotos()
-//             .add(new RestPhotos(rest3,"https://upload.wikimedia.org/wikipedia/commons/5/59/Genos_Steaks.JPG"));
-//        rest3.getRestphotos()
-//             .add(new RestPhotos(rest3,"http://www.jackduggans.com/wp-content/uploads/2017/03/Geno-820x3381.jpg"));
-//        rest3.getRestphotos()
-//             .add(new RestPhotos(rest3, "https://i.ytimg.com/vi/tH135gUUzFc/maxresdefault.jpg"));
-//        rest3.getReviews()
-//             .add(new Reviews(rest3,"American Cuisine", "Cheesesteak", "https://www.genosteaks.com/wp-content/uploads/2015/07/product_slide_1.png", 11.00, "10/10", "Best cheesteaks in Philadelphia!"));
-//        restaurantService.save(rest3);
 
         Role r1 = new Role("admin");
         Role r2 = new Role("user");
@@ -92,9 +64,6 @@ public class SeedData implements CommandLineRunner
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-//        ArrayList<Restaurant> rest = new ArrayList<>();
-//        rest.add(rest1);
-////        rest.add(rest2);
         User u4 = new User("Bob", "password", "New York", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", users);
         u4.getUseremails()
           .add(new Useremail(u4, "bob@email.local"));
