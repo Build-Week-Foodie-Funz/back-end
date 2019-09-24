@@ -4,13 +4,20 @@ import com.buildweek.foodie.exceptions.ResourceNotFoundException;
 import com.buildweek.foodie.models.RestPhotos;
 import com.buildweek.foodie.models.Restaurant;
 import com.buildweek.foodie.models.Reviews;
+import com.buildweek.foodie.models.User;
 import com.buildweek.foodie.repository.RestaurantRepository;
+import com.buildweek.foodie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service(value = "restaurantService")
 public class RestaurantServiceImpl implements RestaurantService
@@ -18,14 +25,18 @@ public class RestaurantServiceImpl implements RestaurantService
     @Autowired
     RestaurantRepository restrepo;
 
+    @Autowired
+    UserRepository userrepos;
+
     @Override
-    public List<Restaurant> findAll()
+    public ArrayList<Restaurant> findAll()
     {
-        List<Restaurant> restaurantsList = new ArrayList<>();
-        restrepo.findAll()
-                 .iterator()
-                 .forEachRemaining(restaurantsList::add);
-        return restaurantsList;
+            ArrayList<Restaurant> restaurantsList = new ArrayList<>();
+            restrepo.findAll()
+                    .iterator()
+                    .forEachRemaining(restaurantsList::add);
+            return restaurantsList;
+
     }
 
     @Override
@@ -58,15 +69,27 @@ public class RestaurantServiceImpl implements RestaurantService
 
         for (Reviews r:restaurant.getReviews())
         {
-            newRestaurant.getReviews().add(new Reviews(r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), newRestaurant));
+            newRestaurant.getReviews().add(new Reviews( newRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
         }
 
         for (RestPhotos rp:restaurant.getRestphotos())
         {
-            newRestaurant.getRestphotos().add(new RestPhotos(rp.getPhoto(), newRestaurant));
+            newRestaurant.getRestphotos().add(new RestPhotos(newRestaurant, rp.getPhoto()));
+        }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails)principal).getUsername();
+            User u = userrepos.findByUsername(username);
+            newRestaurant.getUser().add(u);
+
+
+        } else {
+            String username = principal.toString();
+            return newRestaurant;
         }
 
         return restrepo.save(newRestaurant);
+
     }
 
     @Override
@@ -98,7 +121,7 @@ public class RestaurantServiceImpl implements RestaurantService
         {
             for (Reviews r:restaurant.getReviews())
             {
-                currentRestaurant.getReviews().add(new Reviews(r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview(), currentRestaurant));
+                currentRestaurant.getReviews().add(new Reviews(currentRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
             }
         }
 
@@ -106,7 +129,7 @@ public class RestaurantServiceImpl implements RestaurantService
         {
             for (RestPhotos rp:restaurant.getRestphotos())
             {
-                currentRestaurant.getRestphotos().add(new RestPhotos(rp.getPhoto(), currentRestaurant));
+                currentRestaurant.getRestphotos().add(new RestPhotos(currentRestaurant, rp.getPhoto()));
             }
         }
 

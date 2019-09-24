@@ -2,10 +2,7 @@ package com.buildweek.foodie.services;
 
 import com.buildweek.foodie.exceptions.ResourceFoundException;
 import com.buildweek.foodie.exceptions.ResourceNotFoundException;
-import com.buildweek.foodie.models.Role;
-import com.buildweek.foodie.models.User;
-import com.buildweek.foodie.models.UserRoles;
-import com.buildweek.foodie.models.Useremail;
+import com.buildweek.foodie.models.*;
 import com.buildweek.foodie.repository.RoleRepository;
 import com.buildweek.foodie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +89,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
         newUser.setUsername(user.getUsername());
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setLocation(user.getLocation());
+        newUser.setPhoto(user.getPhoto());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
         for (UserRoles ur : user.getUserroles())
@@ -109,6 +107,13 @@ public class UserServiceImpl implements UserDetailsService, UserService
             newUser.getUseremails()
                    .add(new Useremail(newUser, ue.getUseremail()));
         }
+
+        for(Restaurant r: user.getRestaurant())
+        {
+            newUser.getRestaurant()
+                   .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getUser()));
+        }
+
 
         return userrepos.save(newUser);
     }
@@ -139,6 +144,11 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 currentUser.setLocation(user.getLocation());
             }
 
+            if(user.getPhoto() != null)
+            {
+                currentUser.setPhoto(user.getPhoto());
+            }
+
             if (user.getUserroles()
                     .size() > 0)
             {
@@ -152,6 +162,15 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 {
                     currentUser.getUseremails()
                                .add(new Useremail(currentUser, ue.getUseremail()));
+                }
+            }
+
+            if(user.getRestaurant().size() > 0)
+            {
+                for (Restaurant r: user.getRestaurant())
+                {
+                    currentUser.getRestaurant()
+                               .add(new Restaurant(r.getRestname(), r.getRestlocation(), r.getResthours(), r.getRestrating(), r.getUser()));
                 }
             }
 

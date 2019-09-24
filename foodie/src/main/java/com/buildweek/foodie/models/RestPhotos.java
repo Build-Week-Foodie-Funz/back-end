@@ -24,10 +24,15 @@ public class RestPhotos
     {
     }
 
-    public RestPhotos(String photo, Restaurant restaurant)
+    public RestPhotos(Restaurant restaurant, String photo)
     {
         this.photo = photo;
         this.restaurant = restaurant;
+    }
+
+    public RestPhotos(String photo)
+    {
+        this.photo = photo;
     }
 
     public long getPhotoid()

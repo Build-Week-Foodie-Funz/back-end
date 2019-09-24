@@ -28,7 +28,7 @@ public class Reviews
     @Column(nullable = false)
     private String itemrating;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "Text")
     private String shortreview;
 
     @ManyToOne
@@ -40,7 +40,7 @@ public class Reviews
     {
     }
 
-    public Reviews(String cuisinetype, String menuitemname, String photomenu, Double itemprice, String itemrating, String shortreview, Restaurant restaurant)
+    public Reviews( Restaurant restaurant, String cuisinetype, String menuitemname, String photomenu, Double itemprice, String itemrating, String shortreview)
     {
         this.cuisinetype = cuisinetype;
         this.menuitemname = menuitemname;
@@ -49,6 +49,16 @@ public class Reviews
         this.itemrating = itemrating;
         this.shortreview = shortreview;
         this.restaurant = restaurant;
+    }
+
+    public Reviews(String cuisinetype, String menuitemname, String photomenu, Double itemprice, String itemrating, String shortreview)
+    {
+        this.cuisinetype = cuisinetype;
+        this.menuitemname = menuitemname;
+        this.photomenu = photomenu;
+        this.itemprice = itemprice;
+        this.itemrating = itemrating;
+        this.shortreview = shortreview;
     }
 
     public long getReviewid()

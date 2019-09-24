@@ -31,6 +31,8 @@ public class User extends Auditable
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String location;
 
+    private String photo;
+
     @OneToMany(mappedBy = "user",
                cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
@@ -42,20 +44,41 @@ public class User extends Auditable
     @JsonIgnoreProperties("user")
     private List<Useremail> useremails = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "userrest", joinColumns = {@JoinColumn(name = "userid")}, inverseJoinColumns = {@JoinColumn(name = "restid")})
+    @JsonIgnoreProperties("user")
+    private List<Restaurant> restaurant = new ArrayList<>();
+
     public User()
     {
     }
 
-    public User(String username, String password, List<UserRoles> userRoles)
+    public User(String username, String password, String location, String photo, List<UserRoles> userRoles)
     {
         setUsername(username);
         setPassword(password);
+        setLocation(location);
+        setPhoto(photo);
         for (UserRoles ur : userRoles)
         {
             ur.setUser(this);
         }
         this.userroles = userRoles;
     }
+
+//    public User(String username, String password, String location, String photo, List<UserRoles> userRoles, List<Restaurant> restaurant)
+//    {
+//        setUsername(username);
+//        setPassword(password);
+//        setLocation(location);
+//        setPhoto(photo);
+//        for (UserRoles ur : userRoles)
+//        {
+//            ur.setUser(this);
+//        }
+//        this.userroles = userRoles;
+//        this.restaurant = restaurant;
+//    }
 
     public long getUserid()
     {
@@ -123,6 +146,25 @@ public class User extends Auditable
         this.location = location;
     }
 
+    public String getPhoto()
+    {
+        return photo;
+    }
+
+    public void setPhoto(String photo)
+    {
+        this.photo = photo;
+    }
+
+    public List<Restaurant> getRestaurant()
+    {
+        return restaurant;
+    }
+
+    public void setRestaurant(List<Restaurant> restaurant)
+    {
+        this.restaurant = restaurant;
+    }
 
     public List<SimpleGrantedAuthority> getAuthority()
     {
