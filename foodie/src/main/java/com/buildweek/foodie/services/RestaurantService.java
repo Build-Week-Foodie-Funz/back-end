@@ -2,15 +2,16 @@ package com.buildweek.foodie.services;
 
 import com.buildweek.foodie.models.Restaurant;
 import com.buildweek.foodie.models.Reviews;
+import com.buildweek.foodie.models.User;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public interface RestaurantService
 {
-    ArrayList<Restaurant> findAll();
+    User findAll();
 
     Restaurant findRestaurantById(long id);
+
+//     User findRestaurantById(long id);
 
     Reviews findReviewById(long id);
 

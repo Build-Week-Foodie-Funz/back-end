@@ -8,6 +8,7 @@ import com.buildweek.foodie.repository.RestaurantRepository;
 import com.buildweek.foodie.repository.ReviewsRepository;
 import com.buildweek.foodie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -40,30 +41,52 @@ public class ReviewServiceImpl implements ReviewService
                 .iterator()
                 .forEachRemaining(reviewsList::add);
         return reviewsList;
+
     }
 
     @Override
     public Reviews findReviewById(long id)
     {
-        return reviewrepo.findById(id)
-                       .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
+        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
+        {
+            return reviewrepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
+        } else
+        {
+            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
+        }
     }
 
     @Override
     public void delete(long id)
     {
-        if (reviewrepo.findById(id).isPresent())
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
+        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
         {
-            reviewrepo.deleteById(id);
+            if (reviewrepo.findById(id).isPresent())
+            {
+                reviewrepo.deleteById(id);
+            } else
+            {
+                throw new ResourceNotFoundException(Long.toString(id));
+            }
+
         } else
         {
-            throw new ResourceNotFoundException(Long.toString(id));
+            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
         }
     }
 
     @Override
     public Reviews save(Reviews reviews)
     {
+
         Reviews newReview = new Reviews();
         newReview.setCuisinetype(reviews.getCuisinetype());
         newReview.setMenuitemname(reviews.getMenuitemname());
@@ -73,62 +96,82 @@ public class ReviewServiceImpl implements ReviewService
         newReview.setRestaurant(reviews.getRestaurant());
         newReview.setItemrating(reviews.getItemrating());
 
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+        String username = ((UserDetails)principal).getUsername();
+        User u = userrepos.findByUsername(username);
+        newReview.getRestaurant().getUser().add(u);
+
+
+    } else {
+        String username = principal.toString();
+        return newReview;
+    }
         return reviewrepo.save(newReview);
     }
 
     @Override
     public Reviews update(Reviews reviews, long id, long restid)
     {
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
         Restaurant currentRestaurant = restrepo.findById(restid)
                                                .orElseThrow(() -> new EntityNotFoundException(Long.toString(restid)));
 
-
         Reviews currentReview = reviewrepo.findById(id)
                                          .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
-
-        if(reviews.getMenuitemname() != null)
+        if (currentUser != null)
         {
-            currentReview.setMenuitemname(reviews.getMenuitemname());
-        }
+            if (currentUser.getRestaurant()
+                           .contains(currentRestaurant))
+            {
+                if (reviews.getMenuitemname() != null)
+                {
+                    currentReview.setMenuitemname(reviews.getMenuitemname());
+                }
 
-        if(reviews.getCuisinetype() != null)
+                if (reviews.getCuisinetype() != null)
+                {
+                    currentReview.setCuisinetype(reviews.getCuisinetype());
+                }
+
+                if (reviews.getItemrating() != null)
+                {
+                    currentReview.setItemrating(reviews.getItemrating());
+                }
+
+                if (reviews.getPhotomenu() != null)
+                {
+                    currentReview.setPhotomenu(reviews.getPhotomenu());
+                }
+
+                if (reviews.getItemprice() != null)
+                {
+                    currentReview.setItemprice(reviews.getItemprice());
+                }
+
+                if (reviews.getShortreview() != null)
+                {
+                    currentReview.setShortreview(reviews.getShortreview());
+                }
+
+                if (reviews.getRestaurant() != null)
+                {
+                    currentReview.setRestaurant(currentRestaurant);
+                }
+
+
+                return reviewrepo.save(currentReview);
+            } else
+            {
+                throw new ResourceNotFoundException(Long.toString(id) + "Not Saved");
+            }
+        }
+        else
         {
-            currentReview.setCuisinetype(reviews.getCuisinetype());
+            throw new ResourceNotFoundException(authentication.getName());
         }
-
-        if(reviews.getItemrating() != null)
-        {
-            currentReview.setItemrating(reviews.getItemrating());
-        }
-
-        if(reviews.getPhotomenu() != null)
-        {
-            currentReview.setPhotomenu(reviews.getPhotomenu());
-        }
-
-        if(reviews.getItemprice() != null)
-        {
-            currentReview.setItemprice(reviews.getItemprice());
-        }
-
-        if(reviews.getShortreview() != null)
-        {
-            currentReview.setShortreview(reviews.getShortreview());
-        }
-
-        if(reviews.getRestaurant() != null)
-        {
-            currentReview.setRestaurant(currentRestaurant);
-        }
-
-
-        return reviewrepo.save(currentReview);
     }
-
-//    @Transactional
-//    @Override
-//    public void saveReviewWithRestaurant(long restid, long reviewid)
-//    {
-//        reviewrepo.insertRestaurantToReview(restid, reviewid);
-//    }
 }

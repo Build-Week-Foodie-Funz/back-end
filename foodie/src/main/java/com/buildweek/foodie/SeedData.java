@@ -46,35 +46,22 @@ public class SeedData implements CommandLineRunner
         admins.add(new UserRoles(new User(), r1));
         admins.add(new UserRoles(new User(), r2));
         admins.add(new UserRoles(new User(), r3));
-        User u1 = new User("admin", "password", "Philadelphia", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", admins);
-        u1.getUseremails()
-          .add(new Useremail(u1, "admin@email.local"));
-        u1.getUseremails()
-          .add(new Useremail(u1, "admin@mymail.local"));
+        User u1 = new User("admin", "password", "Philadelphia", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", "admin@gmail.com", admins);
         userService.save(u1);
 
         // user
         ArrayList<UserRoles> users = new ArrayList<>();
 
         users.add(new UserRoles(new User(), r2));
-        User u3 = new User("barnbarn", "ILuvM4th!", "Philadelphia", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", users);
-        u3.getUseremails()
-          .add(new Useremail(u3, "barnbarn@email.local"));
+        User u3 = new User("barnbarn", "ILuvM4th!", "Philadelphia", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", "barnbarn@gmail.com", users);
+
         userService.save(u3);
 
         users = new ArrayList<>();
         users.add(new UserRoles(new User(), r2));
-        User u4 = new User("Bob", "password", "New York", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", users);
-        u4.getUseremails()
-          .add(new Useremail(u4, "bob@email.local"));
+        User u4 = new User("Bob", "password", "New York", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", "bob@gmail.com", users);
+
         userService.save(u4);
-
-
-        users = new ArrayList<>();
-        users.add(new UserRoles(new User(), r2));
-        User u5 = new User("Jane", "password", "Washington", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", users);
-        userService.save(u5);
-
 
 
         //=================================================================================================//

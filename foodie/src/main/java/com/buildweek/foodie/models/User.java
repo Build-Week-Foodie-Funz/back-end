@@ -32,18 +32,16 @@ public class User extends Auditable
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String location;
 
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String email;
+
     private String photo;
 
     @OneToMany(mappedBy = "user",
                cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private List<UserRoles> userroles = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
-    @JsonIgnoreProperties("user")
-    private List<Useremail> useremails = new ArrayList<>();
 
     @ApiModelProperty(name = "userrest", value = "Restaurant made from User", example = "Some Restaurant, Some Restaurant,...")
     @ManyToMany
@@ -55,12 +53,13 @@ public class User extends Auditable
     {
     }
 
-    public User(String username, String password, String location, String photo, List<UserRoles> userRoles)
+    public User(String username, String password, String location, String photo, String email, List<UserRoles> userRoles)
     {
         setUsername(username);
         setPassword(password);
         setLocation(location);
         setPhoto(photo);
+        setEmail(email);
         for (UserRoles ur : userRoles)
         {
             ur.setUser(this);
@@ -68,19 +67,6 @@ public class User extends Auditable
         this.userroles = userRoles;
     }
 
-//    public User(String username, String password, String location, String photo, List<UserRoles> userRoles, List<Restaurant> restaurant)
-//    {
-//        setUsername(username);
-//        setPassword(password);
-//        setLocation(location);
-//        setPhoto(photo);
-//        for (UserRoles ur : userRoles)
-//        {
-//            ur.setUser(this);
-//        }
-//        this.userroles = userRoles;
-//        this.restaurant = restaurant;
-//    }
 
     public long getUserid()
     {
@@ -128,14 +114,14 @@ public class User extends Auditable
         this.userroles = userroles;
     }
 
-    public List<Useremail> getUseremails()
+    public String getEmail()
     {
-        return useremails;
+        return email;
     }
 
-    public void setUseremails(List<Useremail> useremails)
+    public void setEmail(String email)
     {
-        this.useremails = useremails;
+        this.email = email;
     }
 
     public String getLocation()
@@ -186,6 +172,6 @@ public class User extends Auditable
     @Override
     public String toString()
     {
-        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", userRoles=" + userroles + ", useremails=" + useremails + '}';
+        return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + ", userRoles=" + userroles + ", email=" + email + ", photo=" + photo +'}';
     }
 }

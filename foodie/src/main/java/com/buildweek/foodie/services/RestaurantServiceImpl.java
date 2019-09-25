@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service(value = "restaurantService")
 public class RestaurantServiceImpl implements RestaurantService
@@ -35,37 +33,57 @@ public class RestaurantServiceImpl implements RestaurantService
 
 
     @Override
-    public ArrayList<Restaurant> findAll()
+    public User findAll()
     {
-
-            ArrayList<Restaurant> restaurantsList = new ArrayList<>();
-            restrepo.findAll()
-                    .iterator()
-                    .forEachRemaining(restaurantsList::add);
-            return restaurantsList;
-
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails)principal).getUsername();
+            User u = userrepos.findByUsername(username);
+            System.out.println(u.getUserroles());
+            return u;
+        } else {
+            String username = principal.toString();
+            return userrepos.findByUsername(username);
+        }
     }
 
     @Override
     public Restaurant findRestaurantById(long id)
     {
-        return restrepo.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Restaurant id " + id + " not found!"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
+        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
+        {
+            return restrepo.findById(id)
+                           .orElseThrow(() -> new ResourceNotFoundException("Restaurant id " + id + " not found!"));
+        } else
+        {
+            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
+        }
+
     }
 
     @Override
-    public void delete(long id)
+    public void delete(long id) throws EntityNotFoundException
     {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
 
-        if (restrepo.findById(id).isPresent())
-        {
-            restrepo.deleteById(id);
+        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
+            {
+            if (restrepo.findById(id).isPresent())
+            {
+                restrepo.deleteById(id);
+            } else
+            {
+                throw new EntityNotFoundException(Long.toString(id));
+            }
         } else
         {
-            throw new ResourceNotFoundException(Long.toString(id));
+            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
         }
     }
-
 
     @Override
     public Restaurant save(Restaurant restaurant)
@@ -104,69 +122,90 @@ public class RestaurantServiceImpl implements RestaurantService
     @Override
     public Reviews findReviewById(long id)
     {
-        return reviewrepo.findById(id)
-                         .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
+        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
+        {
+            return reviewrepo.findById(id)
+                             .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
+        } else
+        {
+            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
+        }
+
     }
 
 
     @Override
     public Restaurant update(Restaurant restaurant, long id)
     {
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
+        User currentUser = userrepos.findByUsername(authentication.getName());
+
+
         Restaurant currentRestaurant = restrepo.findById(id)
                                                .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
-        if(restaurant.getRestname() != null)
+        if (currentUser != null)
         {
-            currentRestaurant.setRestname(restaurant.getRestname());
-        }
-
-        if(restaurant.getResthours() != null)
-        {
-            currentRestaurant.setResthours(restaurant.getResthours());
-        }
-
-        if(restaurant.getRestlocation() != null)
-        {
-            currentRestaurant.setRestlocation(restaurant.getRestlocation());
-        }
-
-        if(restaurant.getRestrating() != null)
-        {
-            currentRestaurant.setRestrating(restaurant.getRestrating());
-        }
-
-        if(restaurant.getRecentvisit() != null)
-        {
-            currentRestaurant.setRecentvisit(restaurant.getRecentvisit());
-        }
-
-        if(restaurant.getReviews().size() > 0)
-        {
-            for (Reviews r:restaurant.getReviews())
+            if (currentUser.getRestaurant()
+                           .contains(currentRestaurant))
             {
-                currentRestaurant.getReviews().add(new Reviews(currentRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
+                if (restaurant.getRestname() != null)
+                {
+                    currentRestaurant.setRestname(restaurant.getRestname());
+                }
+
+                if (restaurant.getResthours() != null)
+                {
+                    currentRestaurant.setResthours(restaurant.getResthours());
+                }
+
+                if (restaurant.getRestlocation() != null)
+                {
+                    currentRestaurant.setRestlocation(restaurant.getRestlocation());
+                }
+
+                if (restaurant.getRestrating() != null)
+                {
+                    currentRestaurant.setRestrating(restaurant.getRestrating());
+                }
+
+                if (restaurant.getRecentvisit() != null)
+                {
+                    currentRestaurant.setRecentvisit(restaurant.getRecentvisit());
+                }
+
+                if (restaurant.getReviews()
+                              .size() > 0)
+                {
+                    for (Reviews r : restaurant.getReviews())
+                    {
+                        currentRestaurant.getReviews()
+                                         .add(new Reviews(currentRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
+                    }
+                }
+
+                if (restaurant.getRestphotos()
+                              .size() > 0)
+                {
+                    for (RestPhotos rp : restaurant.getRestphotos())
+                    {
+                        currentRestaurant.getRestphotos()
+                                         .add(new RestPhotos(currentRestaurant, rp.getPhoto()));
+                    }
+                }
+
+                return restrepo.save(currentRestaurant);
+            } else
+            {
+                throw new ResourceNotFoundException(Long.toString(id) + "Not Saved");
             }
         }
-
-        if(restaurant.getRestphotos().size() > 0)
+        else
         {
-            for (RestPhotos rp:restaurant.getRestphotos())
-            {
-                currentRestaurant.getRestphotos().add(new RestPhotos(currentRestaurant, rp.getPhoto()));
-            }
+            throw new ResourceNotFoundException(authentication.getName());
         }
-
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (principal instanceof UserDetails) {
-//            String username = ((UserDetails)principal).getUsername();
-//            User u = userrepos.findByUsername(username);
-//            currentRestaurant.getUser().add(u);
-//
-//
-//        } else {
-//            String username = principal.toString();
-//            return currentRestaurant;
-//        }
-
-        return restrepo.save(currentRestaurant);
     }
 }

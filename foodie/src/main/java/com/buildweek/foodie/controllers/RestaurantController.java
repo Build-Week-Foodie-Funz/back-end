@@ -3,13 +3,16 @@ package com.buildweek.foodie.controllers;
 
 import com.buildweek.foodie.models.ErrorDetail;
 import com.buildweek.foodie.models.Restaurant;
+import com.buildweek.foodie.models.User;
 import com.buildweek.foodie.services.RestaurantService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,11 +35,12 @@ public class RestaurantController
                                @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "Sorting criteria in the format: property(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.")})
     @ApiResponses(value = {@ApiResponse(code = 200, message = "All Restaurant Found", response = Restaurant.class),
             @ApiResponse(code = 404, message = "Restaurant Not Found", response = ErrorDetail.class)})
+
     @GetMapping(value = "restaurants", produces = {"application/json"})
     public ResponseEntity<?> listAllRestaurants()
     {
 
-        ArrayList<Restaurant> allRestaurants = restaurantService.findAll();
+       User allRestaurants = restaurantService.findAll();
         return new ResponseEntity<>(allRestaurants, HttpStatus.OK);
     }
 

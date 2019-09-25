@@ -40,6 +40,8 @@ public class UserServiceImpl implements UserDetailsService, UserService
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
     }
 
+
+
     public User findUserById(long id) throws ResourceNotFoundException
     {
         return userrepos.findById(id)
@@ -90,6 +92,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
         newUser.setPasswordNoEncrypt(user.getPassword());
         newUser.setLocation(user.getLocation());
         newUser.setPhoto(user.getPhoto());
+        newUser.setEmail(user.getEmail());
 
         ArrayList<UserRoles> newRoles = new ArrayList<>();
         for (UserRoles ur : user.getUserroles())
@@ -102,11 +105,6 @@ public class UserServiceImpl implements UserDetailsService, UserService
         }
         newUser.setUserroles(newRoles);
 
-        for (Useremail ue : user.getUseremails())
-        {
-            newUser.getUseremails()
-                   .add(new Useremail(newUser, ue.getUseremail()));
-        }
 
         for(Restaurant r: user.getRestaurant())
         {
@@ -149,21 +147,17 @@ public class UserServiceImpl implements UserDetailsService, UserService
                 currentUser.setPhoto(user.getPhoto());
             }
 
+            if(user.getEmail() != null)
+            {
+                currentUser.setEmail(user.getEmail());
+            }
+
             if (user.getUserroles()
                     .size() > 0)
             {
                 throw new ResourceFoundException("User Roles are not updated through User");
             }
 
-            if (user.getUseremails()
-                    .size() > 0)
-            {
-                for (Useremail ue : user.getUseremails())
-                {
-                    currentUser.getUseremails()
-                               .add(new Useremail(currentUser, ue.getUseremail()));
-                }
-            }
 
             if(user.getRestaurant().size() > 0)
             {
