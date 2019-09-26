@@ -150,7 +150,7 @@ public class UserController
     @ApiOperation(value = "Delete by User Id", response = User.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "User Deleted By Id", response = void.class),
             @ApiResponse(code = 500, message = "User Not Deleted By Id", response = ErrorDetail.class)})
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUserById(HttpServletRequest request,
                                             @PathVariable

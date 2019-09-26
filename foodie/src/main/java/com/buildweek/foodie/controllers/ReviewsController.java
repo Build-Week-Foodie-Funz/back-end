@@ -73,7 +73,7 @@ public class ReviewsController
                                               @RequestBody Reviews newReviews, @PathVariable long restid) throws URISyntaxException
     {
         newReviews.setRestaurant(restaurantService.findRestaurantById(restid));
-        newReviews = reviewService.save(newReviews);
+        reviewService.save(newReviews);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newStudentURI = ServletUriComponentsBuilder.fromCurrentRequest()

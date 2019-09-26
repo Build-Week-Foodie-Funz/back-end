@@ -87,14 +87,10 @@ public class SeedData implements CommandLineRunner
         restrepos.save(rest2);
 
         Restaurant rest3 = new Restaurant("Geno's Steaks", "Philadelphia, PA", "24 hours","08/08/2019", "9/10", usersadd);
-        rest3.getRestphotos()
-             .add(new RestPhotos(rest3,"https://upload.wikimedia.org/wikipedia/commons/5/59/Genos_Steaks.JPG"));
-        rest3.getRestphotos()
-             .add(new RestPhotos(rest3,"http://www.jackduggans.com/wp-content/uploads/2017/03/Geno-820x3381.jpg"));
-        rest3.getRestphotos()
-             .add(new RestPhotos(rest3, "https://i.ytimg.com/vi/tH135gUUzFc/maxresdefault.jpg"));
-        rest3.getReviews()
-             .add(new Reviews(rest3,"American Cuisine", "Cheesesteak", "https://www.genosteaks.com/wp-content/uploads/2015/07/product_slide_1.png", 11.00, "10/10", "Best cheesteaks in Philadelphia!"));
+        rest3.getRestphotos().add(new RestPhotos(rest3,"https://upload.wikimedia.org/wikipedia/commons/5/59/Genos_Steaks.JPG"));
+        rest3.getRestphotos().add(new RestPhotos(rest3,"http://www.jackduggans.com/wp-content/uploads/2017/03/Geno-820x3381.jpg"));
+        rest3.getRestphotos().add(new RestPhotos(rest3, "https://i.ytimg.com/vi/tH135gUUzFc/maxresdefault.jpg"));
+        rest3.getReviews().add(new Reviews(rest3,"American Cuisine", "Cheesesteak", "https://www.genosteaks.com/wp-content/uploads/2015/07/product_slide_1.png", 11.00, "10/10", "Best cheesteaks in Philadelphia!"));
         restrepos.save(rest3);
         userrepo.save(u4);
 

@@ -186,9 +186,8 @@ public class RestaurantControllerUnitTest
         Restaurant r1 = new Restaurant("TESTCHANGE",
                                        null,
                                        null, "ZZ", null, null);
-        r1.setRestid(17);
+//        r1.setRestid(17);
 
-//        Restaurant updatedR1 = restaurantService.update(r1, 17);
 
         Mockito.when(restaurantService.update(r1, 17L)).thenReturn(r1);
         ObjectMapper mapper = new ObjectMapper();

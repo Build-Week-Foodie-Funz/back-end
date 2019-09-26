@@ -79,17 +79,17 @@ public class ReviewServiceImpl implements ReviewService
         newReview.setRestaurant(reviews.getRestaurant());
         newReview.setItemrating(reviews.getItemrating());
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-        String username = ((UserDetails)principal).getUsername();
-        User u = userrepos.findByUsername(username);
-        newReview.getRestaurant().getUser().add(u);
-
-
-    } else {
-        String username = principal.toString();
-        return newReview;
-    }
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//        String username = ((UserDetails)principal).getUsername();
+//        User u = userrepos.findByUsername(username);
+//        newReview.getRestaurant().getUser().add(u);
+//
+//
+//    } else {
+//        String username = principal.toString();
+//        return newReview;
+//    }
         return reviewrepo.save(newReview);
     }
 
