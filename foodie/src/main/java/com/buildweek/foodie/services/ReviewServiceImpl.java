@@ -48,27 +48,14 @@ public class ReviewServiceImpl implements ReviewService
     public Reviews findReviewById(long id)
     {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userrepos.findByUsername(authentication.getName());
-
-        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
-        {
             return reviewrepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review id " + id + " not found!"));
-        } else
-        {
-            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
-        }
     }
 
     @Override
     public void delete(long id)
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userrepos.findByUsername(authentication.getName());
 
-        if (currentUser.getRestaurant().contains(restrepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User can not delete restaurant"))))
-        {
             if (reviewrepo.findById(id).isPresent())
             {
                 reviewrepo.deleteById(id);
@@ -77,10 +64,6 @@ public class ReviewServiceImpl implements ReviewService
                 throw new ResourceNotFoundException(Long.toString(id));
             }
 
-        } else
-        {
-            throw new ResourceNotFoundException(Long.toString(id) + " Not current user");
-        }
     }
 
     @Override

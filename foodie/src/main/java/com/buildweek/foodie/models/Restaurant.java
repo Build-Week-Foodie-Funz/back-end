@@ -18,8 +18,7 @@ public class Restaurant
     private long restid;
 
     @ApiModelProperty(name = "restname", value = "Restaurant's Name", required = true, example = "Burger King")
-    @Column(nullable = false,
-            unique = true)
+    @Column(nullable = false)
     private String restname;
 
     @ApiModelProperty(name = "restlocation", value = "Restaurant's Location", required = true, example = "Philadelphia, PA")

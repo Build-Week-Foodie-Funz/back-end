@@ -69,7 +69,7 @@ public class ReviewsController
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Review Added to Restaurant", response = void.class),
             @ApiResponse(code = 500, message = "Review Not Added to Restaurant", response = ErrorDetail.class)})
     @PostMapping(value = "/restaurant/{restid}/reviews", consumes = {"application/json"}, produces = {"application/json"})
-    public ResponseEntity<?> addNewRestaurant(@Valid
+    public ResponseEntity<?> addNewReview(@Valid
                                               @RequestBody Reviews newReviews, @PathVariable long restid) throws URISyntaxException
     {
         newReviews.setRestaurant(restaurantService.findRestaurantById(restid));
@@ -90,7 +90,7 @@ public class ReviewsController
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Review Updated", response = void.class),
             @ApiResponse(code = 500, message = "Review Not Updated", response = ErrorDetail.class)})
     @PutMapping(value = "/restaurant/{restid}/reviews/{reviewid}")
-    public ResponseEntity<?> updateRestaurant(@RequestBody Reviews updateReviews, @PathVariable long restid, @PathVariable long reviewid)
+    public ResponseEntity<?> updateReview(@RequestBody Reviews updateReviews, @PathVariable long restid, @PathVariable long reviewid)
     {
 //        updateReviews.setRestaurant(restaurantService.findRestaurantById(restid));
         ////        updateReviews=reviewService.findReviewById(reviewid);
