@@ -95,15 +95,15 @@ public class RestaurantServiceImpl implements RestaurantService
         newRestaurant.setRestrating(restaurant.getRestrating());
         newRestaurant.setRecentvisit(restaurant.getRecentvisit());
 
-//        for (Reviews r:restaurant.getReviews())
-//        {
-//            newRestaurant.getReviews().add(new Reviews( newRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
-//        }
-//
-//        for (RestPhotos rp:restaurant.getRestphotos())
-//        {
-//            newRestaurant.getRestphotos().add(new RestPhotos(newRestaurant, rp.getPhoto()));
-//        }
+        for (Reviews r:restaurant.getReviews())
+        {
+            newRestaurant.getReviews().add(new Reviews( newRestaurant, r.getCuisinetype(), r.getMenuitemname(), r.getPhotomenu(), r.getItemprice(), r.getItemrating(), r.getShortreview()));
+        }
+
+        for (RestPhotos rp:restaurant.getRestphotos())
+        {
+            newRestaurant.getRestphotos().add(new RestPhotos(newRestaurant, rp.getPhoto()));
+        }
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails)principal).getUsername();

@@ -193,9 +193,11 @@ public class ReviewControllerUnitTest
         r1.getReviews().add(rev);
 
 
-        Mockito.when(reviewService.update(rev, 9L, 6L)).thenReturn(rev);
+
         ObjectMapper mapper = new ObjectMapper();
         String restaurantString = mapper.writeValueAsString(r1);
+
+        Mockito.when(reviewService.update(rev, 9L, 6L)).thenReturn(rev);
 
         RequestBuilder rb = MockMvcRequestBuilders.put(apiUrl, 9L, 6L)
                                                   .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)

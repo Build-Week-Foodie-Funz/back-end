@@ -64,6 +64,23 @@ public class SeedData implements CommandLineRunner
 
             userService.save(u3);
 
+            users.add(new UserRoles(new User(), r2));
+
+
+//            User u5 = new User("Lambda School", "password!", "Philadelphia", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", "Lambda@gmail.com", users);
+//            ArrayList<User> usersaddd = new ArrayList<>();
+//            usersaddd.add(u5);
+//            Restaurant rest7 = new Restaurant("Geno's Steaks", "Philadelphia, PA", "24 hours","08/08/2019", "9/10", usersaddd);
+//            rest7.getRestphotos()
+//                 .add(new RestPhotos(rest7,"https://upload.wikimedia.org/wikipedia/commons/5/59/Genos_Steaks.JPG"));
+//            rest7.getRestphotos()
+//                 .add(new RestPhotos(rest7,"http://www.jackduggans.com/wp-content/uploads/2017/03/Geno-820x3381.jpg"));
+//            rest7.getRestphotos()
+//                 .add(new RestPhotos(rest7, "https://i.ytimg.com/vi/tH135gUUzFc/maxresdefault.jpg"));
+//            rest7.getReviews()
+//                 .add(new Reviews(rest7,"American Cuisine", "Cheesesteak", "https://www.genosteaks.com/wp-content/uploads/2015/07/product_slide_1.png", 11.00, "10/10", "Best cheesteaks in Philadelphia!"));
+//            restrepos.save(rest7);
+
             users = new ArrayList<>();
             users.add(new UserRoles(new User(), r2));
             User u4 = new User("Bob", "password", "New York", "https://files.slack.com/files-pri/T4JUEB3ME-FN9BMEWQJ/nopath.png", "bob@gmail.com", users);
